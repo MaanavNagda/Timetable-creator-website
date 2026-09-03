@@ -1,7 +1,3 @@
-# Local Firebase project config (user-specific)
-.firebaserc
-.firebase/
-
 # Dependencies
 node_modules/
 

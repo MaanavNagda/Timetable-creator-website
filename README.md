@@ -31,52 +31,9 @@ Then open `http://localhost:8000` in your browser.
 
 To run the unit tests, open `http://localhost:8000/tests/`.
 
-## Deploy to Firebase Hosting
+## Deploy
 
-The app is a static HTML/CSS/JS site, so it can be deployed directly to Firebase Hosting.
-
-### One-time setup
-
-1. Install the Firebase CLI:
-
-   ```bash
-   npm install -g firebase-tools
-   ```
-
-   Or use `npx` without installing globally:
-
-   ```bash
-   npx -y firebase-tools@latest login
-   ```
-
-2. Log in to Firebase:
-
-   ```bash
-   firebase login
-   ```
-
-3. In the project folder, link your Firebase project:
-
-   ```bash
-   firebase use --add
-   ```
-
-   This creates a `.firebaserc` file with your project ID.
-
-   Alternatively, copy the provided `.firebaserc.template` to `.firebaserc` and replace `<YOUR_FIREBASE_PROJECT_ID>` with your actual project ID.
-
-4. The `firebase.json` file in this project already sets the public directory to the project root. If you run `firebase init hosting` later, do not overwrite `firebase.json` unless you want to change the configuration.
-
-### Deploy
-
-From the project folder:
-
-```bash
-cd "/home/SkylarStone/Documents/Projects/Timetable maker"
-firebase deploy --only hosting
-```
-
-After it finishes, the CLI prints a public URL like `https://<project-id>.web.app`.
+The app is a pure static HTML/CSS/JS site with no build step, so it can be hosted on any static hosting service (GitHub Pages, Netlify, Vercel, Firebase Hosting, etc.). Just upload the project folder and serve `index.html` from the root.
 
 ### Optional: bundle libraries for offline use
 
@@ -103,8 +60,6 @@ The only external resources are `html2canvas` and `jsPDF`, loaded from cdnjs. To
 ├── tests/
 │   ├── index.html
 │   └── state.tests.js
-├── firebase.json
-├── .firebaserc.template
 └── plan.txt
 ```
 
