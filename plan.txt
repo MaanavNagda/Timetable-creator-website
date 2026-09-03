@@ -1,0 +1,139 @@
+TIMETABLE MAKER - PROJECT PLAN
+------------------------------
+
+1. SCOPE
+Build a cross-platform timetable app with a dark, neon-styled UI matching the reference screenshots.
+Core features:
+- Timetable grid: time slots (rows) vs days (columns).
+- Add / edit / delete time slots (label, start time, end time, auto duration).
+- Add / edit / delete subjects/classes (subject, teacher, description, location, color, selected days).
+- Multi-day selection with optional duplicate to the same time slot on each selected day.
+- Drag-and-drop classes between days and time slots.
+- 20 neon subject/event colours.
+- Timetable background theme switcher (colours, gradients, pictures, geometric/pattern styles).
+- Week A / Week B support, with ability to view/export one or both.
+- 12-hour / 24-hour time format toggle, defaulting to 24-hour.
+- Export timetable as PNG and as PDF (PDF contains the timetable image, including both Week A and Week B when applicable).
+- Persistent local storage of timetable data and settings.
+- Responsive layout and modal dialogs.
+- Manual "Add Time Slot" and "Add New Class" flows.
+
+2. TARGET PLATFORMS
+- Browser-only web app, deployable to static hosts such as Cloudflare Pages or Firebase Hosting.
+- Works on macOS, Windows, and Linux through any modern browser (Chrome, Firefox, Safari, Edge).
+- No native desktop packaging required; HTML/CSS/JS keeps it host-agnostic.
+
+3. TECH STACK RECOMMENDATION
+- HTML5, CSS3, vanilla JavaScript (ES modules). This matches the default website stack and avoids heavy build tools.
+- LocalStorage for persistence.
+- html2canvas (MIT) + jsPDF (MIT) for PNG/PDF export.
+  - Reason: rendering the exact DOM to an image is the simplest way to get the timetable as PNG; jsPDF can embed that image into a one-page PDF.
+  - Alternatives: build own PDF from scratch with manual layout (much more code, read-only), or use browser print-to-PDF (less control, no theming guaranteed).
+- No build framework needed; optional `vendor/` folder can hold bundled export libraries for offline/static-host compatibility.
+
+4. UI/UX DESIGN NOTES (from screenshots)
+- Dark slate/near-black background with semi-transparent colored cards.
+- Header row and time column in a slightly darker shade.
+- Grid uses subtle vertical/horizontal separators.
+- Cards have rounded corners, colored subject title, and muted secondary text (teacher, room, etc.).
+- Action icons (edit / delete) on hover or always visible in the time-slot column.
+- Modals have dark overlay, large inputs, color swatches, day checkboxes, and primary/secondary buttons.
+- Use a clean sans-serif font (Inter or system-ui).
+- Subject colors are 20 neon colours applied to lesson/event cards only.
+- Timetable themes affect only the timetable/app background (solid colours, gradients, images, geometric patterns).
+- Week A / Week B switcher, with a separate timetable grid per week.
+- Drag-and-drop to move classes between days and time slots; duplicate a class to multiple selected days in the same time slot.
+- Time format toggle (12h / 24h), default 24h.
+
+5. DATA MODEL
+TimeSlot:
+  id: string
+  label: string
+  start: "HH:MM" (24h internal)
+  end: "HH:MM"
+  duration: number (minutes, computed)
+
+Class/Subject Entry:
+  id: string
+  timeSlotId: string
+  day: string (Monday..Sunday)
+  week: "A" | "B"
+  subject: string (required)
+  teacher: string (optional)
+  description: string (optional)
+  location: string (optional)
+  color: string (hex / class token)
+
+App Settings:
+  selectedTheme: string
+  timeFormat: "12h" | "24h"  (default "24h")
+  weekView: "A" | "B" | "both"  (default "both")
+  subjectColors: array of 20 neon colors
+
+6. COLOR SYSTEM
+- Provide 20 neon subject colors for lessons/events only; they never change the timetable background.
+- Examples: neon blue, green, orange, red, purple, pink, cyan, lime, yellow, magenta, coral, teal, sky, violet, rose, amber, indigo, emerald, fuchsia, chartreuse.
+- Each card uses the subject color for the title and a low-opacity background of the same color.
+- CSS custom properties (`--subject-color`, `--subject-bg`) make updates easy.
+
+7. THEME SYSTEM
+- Themes control the timetable/app background only.
+- Theme types: solid colours, gradients, picture-style backgrounds (stock/nature/space such as mountains, forests, aurora, nebula, stars), geometric patterns, stylised designs.
+- A theme switcher button opens a panel with live previews and a "Custom" option.
+- Each theme is a CSS class or set of custom properties applied to the timetable wrapper.
+- Subject neon colours always apply to the class cards and are not affected by the background theme.
+- Examples: "Midnight Slate", "Deep Space", "Neon Grid", "Aurora Gradient", "Geometric Dark", "Obsidian", "Cosmic Purple", "Forest Glow".
+
+8. EXPORT
+- "Export PNG" and "Export PDF" buttons.
+- When viewing or exporting both weeks, render Week A and Week B one above the other with a heading for each.
+- Render each timetable container to a canvas with html2canvas.
+- PNG: combined canvas.toBlob -> download.
+- PDF: create an appropriately-sized PDF with jsPDF, embed the combined image, download.
+- The exported image always includes the active background theme.
+
+9. FILE STRUCTURE
+
+timetable-maker/
+├── index.html            # app shell
+├── css/
+│   ├── styles.css        # core layout + default theme variables
+│   └── themes.css        # background theme definitions
+├── js/
+│   ├── state.js          # data model, localStorage, CRUD
+│   ├── ui.js             # rendering the timetable, modals, drag/drop, event binding
+│   ├── colors.js         # 20 neon subject colors and helpers
+│   ├── themes.js         # background theme definitions and switcher
+│   ├── export.js         # PNG/PDF export for single and dual weeks
+│   └── app.js            # entry point
+├── vendor/               # bundled html2canvas + jsPDF for offline/static hosts
+├── tests/
+│   └── state.tests.js    # unit tests for data model functions
+└── package.json          # optional, only if vendor files are fetched through npm
+
+10. TESTING
+- Unit tests for state.js functions (add/delete time slots, add/update classes, color selection, time conflict detection if any).
+- Manual tests: open in Chrome/Firefox/Safari, add slots/classes, switch themes, export PNG/PDF.
+- Cross-OS: test in available Linux browser; no OS-specific code needed for the web version.
+
+11. DECISIONS / ANSWERS
+- Browser app only, ready for Cloudflare Pages / Firebase Hosting.
+- Time format: 12h and 24h options, default 24h.
+- Week starts on Monday.
+- Multi-day selection with optional duplicate to same time slot; drag-and-drop to move classes.
+- Themes apply to timetable background only (colours, gradients, images, geometric); colours apply to lessons/events (20 neons).
+- Week A / Week B support, with combined export showing both weeks.
+- Teacher, description, and location each on their own line and hidden when empty.
+
+12. ACCEPTANCE CRITERIA
+- UI visually close to screenshots (dark, neon cards, grid, rounded, modals).
+- Add/edit/delete time slots works.
+- Add/edit/delete classes with subject, teacher, description, location, color, multiple days works.
+- 20 neon subject color options.
+- Teacher, description, and location each on separate line; only shown if filled.
+- Multi-day duplicate and drag-and-drop to move classes works.
+- Background theme switcher supports solid, gradient, image, geometric, and stylised themes.
+- Week A / Week B switcher and combined export with headings works.
+- 12h/24h time format toggle, default 24h, works correctly.
+- PNG and PDF export work (single and dual week).
+- Data persists across reloads.

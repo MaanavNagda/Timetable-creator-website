@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timetable Maker</title>
+  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/themes.css?v=3">
+</head>
+<body>
+  <div id="app" class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-icon">⏰</span>
+        <h1 class="brand-title">Timetable Maker</h1>
+      </div>
+      <div class="header-controls">
+        <button id="theme-toggle" type="button" class="btn btn-ghost">🎨 Theme</button>
+        <button id="time-format-toggle" type="button" class="btn btn-ghost" title="Toggle 12/24 hour format">24h</button>
+        <button id="show-weekend-toggle" type="button" class="btn btn-ghost" title="Toggle Saturday and Sunday">Mon-Fri</button>
+        <button id="duplicate-week" type="button" class="btn btn-ghost" title="Copy Week A to Week B">⧉ A→B</button>
+        <div class="week-switcher" role="group" aria-label="Week view">
+          <button type="button" data-week="A" class="btn-week">A</button>
+          <button type="button" data-week="B" class="btn-week">B</button>
+          <button type="button" data-week="both" class="btn-week active">Both</button>
+        </div>
+        <button id="export-png" type="button" class="btn btn-primary">PNG</button>
+        <button id="export-pdf" type="button" class="btn btn-primary">PDF</button>
+        <button id="export-data" type="button" class="btn btn-ghost" title="Export timetable as JSON">💾</button>
+        <button id="import-data" type="button" class="btn btn-ghost" title="Import timetable from JSON">⬆️</button>
+        <input type="file" id="import-data-input" class="hidden" accept=".json,application/json">
+      </div>
+    </header>
+
+    <main id="timetables-stage" class="timetables-stage theme-midnight-slate">
+      <!-- Timetables are rendered here by JavaScript. -->
+    </main>
+
+    <div class="add-slot-bar">
+      <button id="add-slot-btn" type="button" class="btn btn-ghost btn-large">+ Add Time Slot</button>
+    </div>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <!-- Time Slot Modal -->
+    <div id="time-slot-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="slot-modal-title">
+      <div class="modal-header">
+        <h2 id="slot-modal-title" class="modal-title">⏰ Add Time Slot</h2>
+        <button type="button" class="modal-close" data-close-slot>×</button>
+      </div>
+      <form id="slot-form">
+        <div class="form-group">
+          <label class="form-label" for="slot-label">Label *</label>
+          <input type="text" id="slot-label" class="form-input" placeholder="e.g., Period 1" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="slot-start">Start Time *</label>
+            <input type="time" id="slot-start" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="slot-end">End Time *</label>
+            <input type="time" id="slot-end" class="form-input" required>
+          </div>
+        </div>
+        <p class="form-hint" id="slot-duration">Duration: 0 minutes</p>
+        <div class="modal-actions">
+          <button type="button" id="slot-delete" class="btn btn-danger hidden">Delete</button>
+          <button type="button" class="btn btn-ghost" data-close-slot>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Class Modal -->
+    <div id="class-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="class-modal-title">
+      <div class="modal-header">
+        <h2 id="class-modal-title" class="modal-title">➕ Add New Class</h2>
+        <button type="button" class="modal-close" data-close-class>×</button>
+      </div>
+      <form id="class-form">
+        <div class="form-group">
+          <label class="form-label" for="class-subject">Subject *</label>
+          <input type="text" id="class-subject" class="form-input" placeholder="e.g., Mathematics..." required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="class-description">Description</label>
+          <textarea id="class-description" class="form-textarea" placeholder="Additional details..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="class-teacher">Teacher</label>
+            <input type="text" id="class-teacher" class="form-input" placeholder="e.g., Mr Smith">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="class-location">Location</label>
+            <input type="text" id="class-location" class="form-input" placeholder="e.g., 4B">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color *</label>
+          <div id="class-color-grid" class="color-grid"></div>
+          <input type="hidden" id="class-color" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="class-week">Week *</label>
+            <select id="class-week" class="form-select" required>
+              <option value="A">Week A</option>
+              <option value="B">Week B</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="class-time-slot">Time Slot *</label>
+            <select id="class-time-slot" class="form-select" required></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apply to Days *</label>
+          <div id="class-days-grid" class="days-grid"></div>
+        </div>
+        <p class="form-hint" id="class-days-hint">A class will be created for each selected day.</p>
+        <div class="modal-actions">
+          <button type="button" id="class-delete" class="btn btn-danger hidden">Delete</button>
+          <button type="button" class="btn btn-ghost" data-close-class>Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Theme Modal -->
+    <div id="theme-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="theme-modal-title">
+      <div class="modal-header">
+        <h2 id="theme-modal-title" class="modal-title">🎨 Choose Theme</h2>
+        <button type="button" class="modal-close" data-close-theme>×</button>
+      </div>
+      <div id="theme-grid" class="theme-grid"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" data-close-theme>Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Export libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- App modules -->
+  <script src="js/colors.js?v=3"></script>
+  <script src="js/themes.js?v=3"></script>
+  <script src="js/state.js?v=3"></script>
+  <script src="js/ui.js?v=3"></script>
+  <script src="js/export.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+</body>
+</html>

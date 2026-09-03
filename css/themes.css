@@ -1,0 +1,108 @@
+/* Timetable background themes.
+   These are applied to the .timetables-stage element.
+   Picture-style themes are built from CSS gradients and patterns so the app
+   stays self-contained and works on static hosts such as Cloudflare Pages. */
+
+.theme-midnight-slate {
+  background: #181b25;
+}
+
+.theme-obsidian {
+  background: #0b0d10;
+}
+
+.theme-deep-space {
+  background: radial-gradient(circle at 25% 30%, #2d1b4e 0%, #0b0d10 65%);
+}
+
+.theme-neon-grid {
+  background-color: #0a0a0f;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.theme-aurora-gradient {
+  background: linear-gradient(135deg, #0b0d10 0%, #0d3325 30%, #2a0d3d 65%, #0b0d10 100%);
+}
+
+.theme-geometric-dark {
+  background-color: #11131a;
+  background-image:
+    linear-gradient(30deg, rgba(255, 255, 255, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.03) 87.5%, rgba(255, 255, 255, 0.03)),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.03) 87.5%, rgba(255, 255, 255, 0.03)),
+    linear-gradient(30deg, rgba(255, 255, 255, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.03) 87.5%, rgba(255, 255, 255, 0.03)),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.03) 12%, transparent 12.5%, transparent 87%, rgba(255, 255, 255, 0.03) 87.5%, rgba(255, 255, 255, 0.03)),
+    linear-gradient(60deg, rgba(255, 255, 255, 0.05) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05)),
+    linear-gradient(60deg, rgba(255, 255, 255, 0.05) 25%, transparent 25.5%, transparent 75%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
+
+.theme-cosmic-purple {
+  background: radial-gradient(circle at 50% 40%, #3d1b6e 0%, #0b0d10 70%);
+}
+
+.theme-forest-glow {
+  background:
+    radial-gradient(circle at 80% 20%, rgba(0, 191, 165, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 20% 80%, rgba(118, 255, 3, 0.08) 0%, transparent 45%),
+    linear-gradient(180deg, #0b0d10 0%, #0d1f15 50%, #0b0d10 100%);
+}
+
+.theme-sunset-horizon {
+  background: linear-gradient(180deg, #0b0d10 0%, #2d0d18 25%, #7c2d2d 50%, #d97706 75%, #0b0d10 100%);
+}
+
+.theme-ocean-depths {
+  background:
+    radial-gradient(circle at 20% 80%, rgba(0, 176, 255, 0.18) 0%, transparent 45%),
+    radial-gradient(circle at 80% 10%, rgba(0, 191, 165, 0.12) 0%, transparent 45%),
+    linear-gradient(180deg, #0b0d10 0%, #0a1f2e 50%, #0b0d10 100%);
+}
+
+.theme-galaxy-spiral {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 20%),
+    radial-gradient(circle at 55% 45%, rgba(120, 80, 220, 0.35) 0%, transparent 30%),
+    radial-gradient(circle at 45% 55%, rgba(0, 229, 255, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 40% 40%, rgba(213, 0, 249, 0.18) 0%, transparent 35%),
+    #0b0d10;
+}
+
+.theme-northern-lights {
+  background:
+    radial-gradient(ellipse at 30% 45%, rgba(0, 230, 118, 0.2) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 55%, rgba(213, 0, 249, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 30%, rgba(0, 229, 255, 0.12) 0%, transparent 60%),
+    #0b0d10;
+}
+
+.theme-cyber-mesh {
+  background-color: #0b0d10;
+  background-image:
+    linear-gradient(rgba(41, 121, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 121, 255, 0.12) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.theme-mountain-mist {
+  background:
+    linear-gradient(180deg, #0b0d10 0%, #161b25 35%, #1f2a38 60%, #0b0d10 100%);
+}
+
+.theme-stardust {
+  background-color: #0b0d10;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.35) 1px, transparent 1.5px);
+  background-size: 50px 50px, 80px 80px;
+  background-position: 0 0, 25px 25px;
+}
+
+.theme-volcanic {
+  background:
+    radial-gradient(circle at 50% 100%, rgba(239, 68, 68, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, #0b0d10 0%, #1f1010 50%, #0b0d10 100%);
+}
