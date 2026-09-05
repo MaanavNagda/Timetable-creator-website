@@ -1,4 +1,4 @@
-# Timetable Maker
+# /MNT Node Timetable Creator Website
 
 A cross-platform, browser-based timetable app with a dark neon UI, 20 subject colours, background themes, Week A/Week B support, PNG/PDF export, and drag-and-drop editing.
 
